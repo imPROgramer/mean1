@@ -11,8 +11,10 @@ export class AuthGuardService implements CanActivate {
 
   canActivate(): boolean {
     // return true if authenticated else redirect to login page
+    if(this.dataService.isLoggedIn)
+      return true;
 
-    return;
+    return false;
   }
 
 }

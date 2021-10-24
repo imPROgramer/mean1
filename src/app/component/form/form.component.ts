@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Patient } from '../../models/patient';
 import { DataService } from '../../services/data.service';
-import * as alertify from 'alertify.js';
+// import * as alertify from 'alertify.js';
 
 @Component({
   selector: 'app-form',
@@ -16,8 +16,9 @@ export class FormComponent implements OnInit {
 
   complexForm: FormGroup;
   patientDetails = new Patient;
-  today: string;
   result;
+  complexFormControl;
+  today: string;
 
   noRecordsFound = 'No patient records found in the list. Click on Register New Patient to add Patient details.';
 
@@ -36,30 +37,33 @@ export class FormComponent implements OnInit {
   patternEmail = 'Pattern does not match.';
 
   ngOnInit() {
-    this.today = this.datePipe.transform(Date.now(), 'yyyy-MM-dd');
+    // this.today = this.datePipe.transform(Date.now(), 'yyyy-MM-dd');
   }
 
   constructor( fb: FormBuilder,private datePipe: DatePipe,private route: Router, private dataService: DataService){
-    
-    // add necessary validators
-
     this.complexForm = fb.group({
-      'firstName' : [''],
-      'lastName': [''],
-      'gender' : [null],
-      'dob' : [null],
-      'mobile' : [''],
-      'email' : [''],
+      'firstName' : ['',Validators.required,Validators.minLength(3),Validators.maxLength(20)],
+      'lastName': ['',Validators.required,Validators.minLength(3),Validators.maxLength(20)],
+      'gender' : ['',,Validators.required],
+      'dob' : ['',Validators.required],
+      'mobile' : ['',Validators.required,Validators.pattern(/^[1-9][0-9]{9}$/),Validators.maxLength(10)],
+      'email' : ['',Validators.required,Validators.pattern('^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')],
       'description' : ''
-    })
+    });
+    this.complexFormControl = this.complexForm.controls;
   }
 
   submitForm(value: any){
 
     // assign new date object to reportedTime
+    this.patientDetails.registeredTime = new Date();
     // should reister new patient using service
-    // if added successfully should redirect to 'patientList' page
-
+    this.dataService.registerPatient(this.patientDetails).subscribe({next: (response)=>{
+      // if added successfully should redirect to 'patientList' page
+      this.route.navigateByUrl('/patientList');
+    }})
+    
+    
   }
 
 }

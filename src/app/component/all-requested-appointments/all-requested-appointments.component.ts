@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Router } from '@angular/router';
-import * as alertify from 'alertify.js';
+// import * as alertify from 'alertify.js';
 
 @Component({
   selector: 'app-all-requested-appointments',
@@ -17,25 +17,28 @@ export class AllRequestedAppointmentsComponent implements OnInit {
 
   ngOnInit() {
     // call appointments method by default
+    this.appointments();
   }
 
   appointments() {
 
     // get all requested appointments from service
-
+    this.allAppointments = this.dataService.requestedAppointments();
   }
 
   view(patientId) {
 
     // should navigate to 'patientList' page with selected patientId
+    this.route.navigateByUrl('/patientList/'+patientId);
 
   }
 
   cancelAppointment(id) {
 
     // delete selected appointment uing service
-
+    this.dataService.deleteAppointment(id);
     // After deleting the appointment, get all requested appointments
+    this.appointments();
 
 
   }

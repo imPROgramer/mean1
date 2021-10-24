@@ -1,5 +1,6 @@
 import { Component, OnInit, DoCheck, Inject } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, PartialObserver } from 'rxjs';
+import { ApiService } from '../../services/api.service';
 import {DataService } from '../../services/data.service';
 import { Users } from '../../models/users.model';
 import {ActivatedRoute} from '@angular/router';
@@ -12,7 +13,7 @@ import {ActivatedRoute} from '@angular/router';
 export class HeaderComponent implements OnInit {
 
   userId = -1;
-  private userDetails = new Users;
+  userDetails = new Users;
 
   constructor(private dataService: DataService) { 
 
@@ -21,14 +22,20 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
 
     // get userId from service and assign it to userId property
-
+      this.userId = this.dataService.getUserId();
     // call getProfileDetails method to get user details
+    this.getProfileDetails();
 
   }
 
   getProfileDetails() {
 
   // call getUserDetails method of dataService and assign response to userDetails property
+    this.dataService.getUserDetails(this.userId).subscribe(
+      (user) => {
+        this.userDetails = user;
+      }
+    )
     
   }
 

@@ -30,19 +30,25 @@
 
         <!-- disable the same when clicking on this button -->
         <!-- call bookAppointment method when clicking on this button-->
-        <button id="book-appointment" class="btn btn-success book-btn">Book Appointment</button>
+        <button id="book-appointment" class="btn btn-success book-btn"
+        [disabled]="!isBookAppointment"
+        (click)="bookAppointment()">
+        Book Appointment</button>
 
 
 
         <!-- disable the same when clicking on this button -->
         <!-- call scheduledAppointment method when clicking on this button-->
-        <button id="Scheduled-appointment" class="btn btn-warning book-btn">Scheduled Appointment</button>
+        <button id="Scheduled-appointment" class="btn btn-warning book-btn"
+        [disabled]="!isScheduledAppointment"
+        (click)="scheduledAppointment()">
+        Scheduled Appointment</button>
     </div>
   </div>
 
     <!-- show book appointment form if "Book Appointment" button clicked-->
     <!-- call scheduleAppointment method if form is valid-->
-    <form id="form-container" class="form-container" >
+    <form id="form-container" class="form-container" [formGroup]="appointmentForm" *ngIf="isFormEnabled">
       <h2 class="view-header" style="padding-left: 100px">Book Appointment</h2>
         <div class="form-content">
 
@@ -52,13 +58,17 @@
                   Select Disease:<span class="required">*</span>
                 </label>
                 <div>
-                  <select id="select-selectDisease" class="text-box select" >
+                  <select id="select-selectDisease" class="text-box select" 
+                    formControlName="selectDisease">
                     <option class="label-content" value="null" disabled="true" >Select disease</option>
                     <!-- display diseases list-->
-                    <option id="option-value" class="label-content">{{item.name}}</option>
+                    <option id="option-value" class="label-content" *ngRepeat="let disease of names" value="{{disease}}">{{disease}}</option>
                   </select>
                 </div>
-                <div id="error-no-selectDisease" class="alert alert-danger error-msg">
+                <div id="error-no-selectDisease" class="alert alert-danger error-msg"
+                *ngIf="(appointmentFormControls.selectDisease.dirty ||
+                      appointmentFormControls.selectDisease.touched) &&
+                      appointmentFormControls.selectDisease.errors?.required">
                   noselectDisease
                 </div>
               </div>
@@ -68,13 +78,16 @@
                 Priority:<span class="required">*</span>
               </label>
               <div>
-                <select id="priority" class="text-box select" >
+                <select id="priority" class="text-box select" formControlName="priority">
                   <option class="label-content" value="null" disabled="true" >Select priority</option>
                   <option id="normal" class="label-content" value="Normal">Normal</option>
                   <option id="urgent" class="label-content" value="Urgent">Urgent</option>
                 </select>
               </div>
-              <div id="error-no-priority" class="alert alert-danger error-msg">
+              <div id="error-no-priority" class="alert alert-danger error-msg"
+              *ngIf="(appointmentFormControls.priority.dirty ||
+                      appointmentFormControls.priority.touched) &&
+                      appointmentFormControls.priority.errors?.required">
                 nopriority
               </div>
             </div>
@@ -84,27 +97,34 @@
                 tentativeDate:<span class="required">*</span>
               </label>
               <div >
-                <input id="date-input" class="form-control date-input glyphicon glyphicon-calendar" type="date" placeholder="tentativeDate" min="{{today}}">
+                <input id="date-input" class="form-control date-input glyphicon glyphicon-calendar" 
+                  formControlName="tentativeDate"
+                  type="date" placeholder="tentativeDate" min="{{today}}">
               </div>
-              <div id="error-no-tentativeDate" class="alert alert-danger error-msg">
+              <div id="error-no-tentativeDate" class="alert alert-danger error-msg"
+              *ngIf="(appointmentFormControls.tentativeDate.dirty ||
+                      appointmentFormControls.tentativeDate.touched) &&
+                      appointmentFormControls.tentativeDate.errors?.required">
                 notentativeDate
               </div>
             </div>
           </div>
         <div class="form-group">
           <!-- disable button if form not valid -->
-          <button type="submit" id="submit-btn" class="btn btn-primary submit-btn">Schedule</button>
+          <button type="submit" id="submit-btn" class="btn btn-primary submit-btn"
+            [disabled]="!appointmentForm.valid" (click)="scheduleAppointment()">
+          Schedule</button>
         </div>
       </div>
     </form>
 
 
   <!-- show Scheduled Appointment table if "Scheduled Appointment" button clicked-->
-  <div id="table-container" class="table-container">
+  <div id="table-container" class="table-container" *ngIf="isTableEnabled">
     <h2 class="view-header">Scheduled Appointment</h2>
     <!-- display no records found message if there is no appointment -->
-    <div class="no-records">No Records Found</div>
-    <table class="table-class">
+    <div class="no-records" >No Records Found</div>
+    <table class="table-class" >
       <thead>
         <tr class="table-head">
           <th>Appointment id</th>
@@ -117,16 +137,17 @@
       </thead>
       <tbody>
         <!--display scheduled appointments-->
-        <tr id="table-row">
-          <td id="table-id" >{{item.id}}</td>
-          <td id="table-disease" class="td-column">{{item.disease}}</td>
-          <td id="table-priority" >{{item.priority}}</td>
-          <td id="table-tentativedate">{{item.tentativedate| date: 'dd/MM/yyyy'}}</td>
-          <td id="table-requestedOn">{{item.registeredTime| date: 'dd/MM/yyyy hh:mm:ss'}}</td>
+        <tr id="table-row" *ngFor="let appointment of appointmentDetails">
+          <td id="table-id" >{{appointment.id}}</td>
+          <td id="table-disease" class="td-column">{{appointment.disease}}</td>
+          <td id="table-priority" >{{appointment.priority}}</td>
+          <td id="table-tentativedate">{{appointment.tentativedate}}</td>
+          <td id="table-requestedOn">{{appointment.registeredTime }}</td>
           <td class="column-btn">
 
             <!-- call cancelAppointment method with selected id when clicking on this button-->
-            <button id="user-cancel" class="btn btn-danger btn-spc">
+            <button id="user-cancel" class="btn btn-danger btn-spc" 
+              (click)="cancelAppointment(appointment.id)">
               <span class="btn-value">Cancel Appointment</span>
             </button>
           </td>

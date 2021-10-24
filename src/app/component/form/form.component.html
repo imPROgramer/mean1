@@ -12,20 +12,31 @@
         </div>
 
         <!-- call submitForm method with all form values if form is valid -->
-        <form>
+        <form  (ngSubmit)="submitForm($event)" [formGroup]="complexForm">
 
           <div class="form-group">
             <label class="label-name">
               First Name:<span class="required">*</span>
             </label>
-            <input id="firstname" class="form-control text-box" type="text" placeholder="FIRSTNAME">
-            <div id="error-no-firstname" class="alert alert-danger error-msg">
+            <input id="firstname" class="form-control text-box"
+            formControlName="firstName" required
+             type="text" placeholder="FIRSTNAME">
+            <div id="error-no-firstname" class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.firstName.dirty ||
+                   complexFormControl.firstName.touched) &&
+                   complexFormControl.firstName.errors?.required">
               {{emptyFirstname}}
             </div>
-            <div id="error-minlength-firstname" class="alert alert-danger error-msg">
+            <div id="error-minlength-firstname" class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.firstName.dirty ||
+                   complexFormControl.firstName.touched) &&
+                   complexFormControl.firstName.errors?.minlength">
               {{minlengthFirstname}}
             </div>
-            <div id="error-maxlength-firstname" class="alert alert-danger error-msg">
+            <div id="error-maxlength-firstname" class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.firstName.dirty ||
+                   complexFormControl.firstName.touched) &&
+                   complexFormControl.firstName.errors?.maxlength">
               {{maxlengthFirstname}}
             </div>
           </div>
@@ -34,14 +45,25 @@
             <label class="label-name">Last Name:
               <span class="required">*</span>
             </label>
-            <input id="lastname" class="form-control text-box" type="text" placeholder="LASTNAME">
-            <div id="error-no-lastname"  class="alert alert-danger error-msg">
+            <input id="lastname" class="form-control text-box"
+            formControlName="lastName" required
+            type="text" placeholder="LASTNAME">
+            <div id="error-no-lastname"  class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.lastName.dirty ||
+                   complexFormControl.lastName.touched) &&
+                   complexFormControl.lastName.errors?.required">
               {{emptyLastname}}
             </div>
-            <div id="error-minlength-lastname"  class="alert alert-danger error-msg">
+            <div id="error-minlength-lastname"  class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.lastName.dirty ||
+                   complexFormControl.lastName.touched) &&
+                   complexFormControl.lastName.errors?.minlength">
               {{minlengthLastname}}
             </div>
-            <div id="error-maxlength-lastname" class="alert alert-danger error-msg">
+            <div id="error-maxlength-lastname" class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.lastName.dirty ||
+                   complexFormControl.lastName.touched) &&
+                   complexFormControl.lastName.errors?.maxlength">
               {{maxlengthLastname}}
             </div>
           </div>
@@ -51,12 +73,17 @@
               <span class="required">*</span>
             </label>
             <div class="input-div">
-            <input type="radio" id="male" class="input-content" value="Male" >
+            <input type="radio" id="male" class="input-content" value="Male" 
+            formControlName="gender" required>
             <label class="label-content" for="male">Male</label>
-            <input type="radio" id="female" class="input-content" value="Female" >
+            <input type="radio" id="female" class="input-content" value="Female" 
+            formControlName="gender" required>
             <label class="label-content" for="female">Female</label>
             </div>
-            <div id="error-no-gender" class="alert alert-danger error-msg">
+            <div id="error-no-gender" class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.lastName.dirty ||
+                   complexFormControl.lastName.touched) &&
+                   complexFormControl.lastName.errors?.required">
               {{noGender}}
             </div>
           </div>
@@ -66,9 +93,14 @@
               Date of birth:<span class="required">*</span>
             </label>
             <div >
-            <input id="date-input" class="form-control date-input glyphicon glyphicon-calendar" type="date" placeholder="Date of birth" min="1968-01-01" max="{{today}}">
+            <input id="date-input" class="form-control date-input glyphicon glyphicon-calendar" 
+            formControlName="dob" required
+            type="date" placeholder="Date of birth" min="1968-01-01" max="{{today}}">
             </div>
-            <div id="error-no-dob" class="alert alert-danger error-msg">
+            <div id="error-no-dob" class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.dob.dirty ||
+                   complexFormControl.dob.touched) &&
+                   complexFormControl.dob.errors?.required">
               {{noDob}}
             </div>
           </div>
@@ -77,14 +109,24 @@
             <label class="label-name">
               Contact number:<span class="required">*</span>
             </label>
-            <input id="mobile" class="form-control text-box" type="text" placeholder="mobile number">
-            <div id="error-no-mobile" class="alert alert-danger error-msg">
+            <input id="mobile" class="form-control text-box" type="text" placeholder="mobile number"
+            formControlName="mobile" required>
+            <div id="error-no-mobile" class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.mobile.dirty ||
+                   complexFormControl.mobile.touched) &&
+                   complexFormControl.mobile.errors?.required">
               {{noMobile}}
             </div>
-            <div id="error-number-mobile" class="alert alert-danger error-msg">
+            <div id="error-number-mobile" class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.mobile.dirty ||
+                   complexFormControl.mobile.touched) &&
+                   complexFormControl.mobile.errors?.pattern">
               {{numberMobile}}
             </div>
-            <div id="error-maxlength-mobile" class="alert alert-danger error-msg">
+            <div id="error-maxlength-mobile" class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.mobile.dirty ||
+                   complexFormControl.mobile.touched) &&
+                   complexFormControl.mobile.errors?.maxlength">
               {{maxlengthMobile}}
             </div>
           </div>
@@ -93,9 +135,14 @@
             <label class="label-name" for="email">
               Email:<span class="required">*</span>
             </label>
-            <input id="email" class="form-control text-box" type="email"  placeholder="example:abc12@tcs.com">
+            <input id="email" class="form-control text-box" type="email"  
+            formControlName="email" required>
+            placeholder="example:abc12@tcs.com">
 
-            <div id="error-pattern-email" class="alert alert-danger error-msg">
+            <div id="error-pattern-email" class="alert alert-danger error-msg"
+            *ngIf="(complexFormControl.email.dirty ||
+                   complexFormControl.email.touched) &&
+                   complexFormControl.email.errors?.pattern">
               {{patternEmail}}
             </div>
           </div>
@@ -109,7 +156,11 @@
 
           <div class="form-group">
           <!-- disable button if form not valid -->
-            <button type="submit" id="submit-btn" class="btn btn-primary submit-btn">Submit</button>
+            <button type="submit" id="submit-btn" 
+            class="btn btn-primary submit-btn"
+            [disabled]="!complexForm.valid">
+              Submit
+            </button>
           </div>
 
         </form>

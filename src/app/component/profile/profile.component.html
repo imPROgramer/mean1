@@ -8,30 +8,29 @@
       </div>
     </div>
     <div class="home-profile-wrapper border">
-
       <!-- hide profile details if editing the form-->
-      <ul id="profileDetails" class="profile-details">
+      <ul id="profileDetails" class="profile-details" *ngIf="!editProfile">
         <li class="list-items" >
-          <fa class="home-icons" name="user" size="2x"></fa>
+          Name:
           <span id="usernameVal"  >
             {{userDetails?.username}}
           </span>
 
         </li>
         <li class="list-items">
-          <fa class="home-icons fa-icon " name="mobile" size="2x"></fa>
+          Mobile:
           <span id="mobileVal">
             {{userDetails?.mobile}}
           </span>
         </li>
         <li class="list-items">
-          <fa class="home-icons fa-icon" name="envelope" size="2x"></fa>
+          Email:
           <span id="emailVal" class="list-items" >
             {{userDetails?.email}}
           </span>
         </li>
         <li class="list-items">
-          <fa class="home-icons" name="map-marker" size="2x"></fa>
+          Location:
           <span id="locationVal" class="list-items">
             {{userDetails?.location}}
           </span>
@@ -39,21 +38,29 @@
       </ul>
 
       <!-- show edit profile form if edit profile button clicked-->
-      <form id="editProfileForm" class="ro-form profile-form">
+      <form id="editProfileForm" class="ro-form profile-form" *ngIf="editProfile"
+        [formGroup]="editProfileForm">
         <h2>Edit your profile</h2>
         <div class="form-group">
           <label for="username">
             Name
           </label>
-          <input type="text" id="consumerName" value="" placeholder="Name">
+          <input type="text" id="consumerName" value="" 
+          formControlName="userName"
+          placeholder="Name">
 
         </div>
         <div class="form-group">
           <label for="mobile">
             Contact number
           </label>
-          <input type="text" value="" id="mobile" placeholder="mobile number">
-          <div class="form-error-messages">
+          <input type="text" value="" id="mobile"
+           formControlName="mobile"
+           placeholder="mobile number">
+          <div class="form-error-messages"
+          *ngIf="(editProfileFormControls.mobile.dirty ||
+          editProfileFormControls.mobile.touched) &&
+          editProfileFormControls.mobile.errors?.pattern">
             {{mobileErrMsg}}
           </div>
         </div>
@@ -61,8 +68,13 @@
           <label for="email">
             Email
           </label>
-          <input type="email" value="" id="email" placeholder="Email">
-          <div class="form-error-messages">
+          <input type="email" value="" id="email" 
+            formControlName="email"
+            placeholder="Email">
+          <div class="form-error-messages"
+          *ngIf="(editProfileFormControls.email.dirty ||
+          editProfileFormControls.email.touched) &&
+          editProfileFormControls.email.errors?.pattern">
             {{emailErrMsg}}
           </div>
         </div>
@@ -71,26 +83,35 @@
           <label for="location">
             Location
           </label>
-          <input type="text" value="" id="location" placeholder="Location">
-          <div class="form-error-messages">
+          <input type="text" value="" id="location"
+          formControlName="location"
+           placeholder="Location">
+          <div class="form-error-messages"
+          *ngIf="(editProfileFormControls.location.dirty ||
+          editProfileFormControls.location.touched) &&
+          editProfileFormControls.location.errors?.required">
             {{locationErrMsg}}
           </div>
         </div>
 
         <!-- disable button if form not valid -->
         <!-- call changeMyProfile method when clicking on this button-->
-        <button class="btn" type="submit" id="editSubmitBtn">Make changes</button>
+        <button class="btn" type="submit" id="editSubmitBtn" (click)="changeMyProfile()"
+          [disabled]="!editProfileForm.valid">
+          Make changes
+        </button>
       </form>
       <div class="profile-edit-choice">
 
         <!-- show button if not editing the form-->
         <!-- call editMyProfile method when clicking on this button-->
-        <button id="editProfileBtn" class="prompt-btn btn">
-        Edit profile</button>
+        <button id="editProfileBtn" class="prompt-btn btn" *ngIf="!editProfile" (click)="editMyProfile()">
+          Edit profile
+        </button>
 
         <!-- show button if editing the form-->
         <!-- call discardEdit method when clicking on this button-->
-        <button id="editDiscardBtn" class="alert-btn btn">Discard</button>
+        <button id="editDiscardBtn" class="alert-btn btn" *ngIf="editProfile" (click)="discardEdit()">Discard</button>
       </div>
     </div>
   </div>

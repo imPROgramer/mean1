@@ -18,11 +18,12 @@ export class AllPatientsListComponent implements OnInit {
   ngOnInit() {
 
     // get all patients list from service
+    this.allPatients = this.dataService.getAllPatientsList();
 
   }
 
   view(patientId) {
-
+      this.route.navigateByUrl('/patientList/'+patientId);
     // should navigate to 'patientList' page with selected patientId
     
   }
