@@ -1,6 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable} from 'rxjs';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/map';
+import 'rxjs/add/observable/throw';
 
 import { Credentials } from '../models/credentials.model';
 import { Users } from '../models/users.model';
@@ -43,7 +46,7 @@ export class ApiService {
     // should return user details retireved from server
     return this.http.get(reqURL).pipe(
       map((u:Users)=>u),
-      catchError((err)=>throwError(err))
+      catchError((err)=>Observable.throw(err))
     )
   }
 
@@ -54,7 +57,7 @@ export class ApiService {
     // should return user details if successfully updated the details
     return this.http.put(requestUrl ,userDetails).pipe(
       map((u:Users)=>u),
-      catchError((err)=>throwError(err))
+      catchError((err)=>Observable.throw(err))
     )
   
   }

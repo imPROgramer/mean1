@@ -1,6 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
 import { Credentials } from '../models/credentials.model';
 import { Users } from '../models/users.model';
 import { Patient } from '../models/patient';
@@ -23,16 +25,16 @@ export class DataService {
     this.api.checkLogin(username,password).subscribe(res=>{
       localStorage.setItem('userId',res.userId+'');
       this.isLogIn.next(true);
-      return of(true);
+      return Observable.of(true);
     })
     // return true if user authenticated
     if(localStorage.getItem('userId') != null){
       this.isLogIn.next(true);
-      return of(true);
+      return Observable.of(true);
     }
     // return false if user not authenticated 
 
-    return of(false);
+    return Observable.of(false);
   }
 
   getAuthStatus(): Observable<boolean> {
@@ -64,9 +66,9 @@ export class DataService {
       }
     );
     if(u)
-    return of(true);
+    return Observable.of(true);
 
-    return of(false);
+    return Observable.of(false);
   }
 
   registerPatient(patientDetails): Observable<any> {
