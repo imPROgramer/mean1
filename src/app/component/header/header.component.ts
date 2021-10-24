@@ -1,5 +1,5 @@
 import { Component, OnInit, DoCheck, Inject } from '@angular/core';
-import { Observable, PartialObserver } from 'rxjs';
+import { Observable} from 'rxjs';
 import { ApiService } from '../../services/api.service';
 import {DataService } from '../../services/data.service';
 import { Users } from '../../models/users.model';
